@@ -1,6 +1,7 @@
-import { formatAddress } from "./formatAddress.js";
+import { formatAddress } from "../utils/formatAddress.js";
 
 export const Card = ({ name, username, email, phone, address }) => {
+  const card = document.createElement("div");
   const cardContent = `
             <table>
                 <tbody>
@@ -35,7 +36,6 @@ export const Card = ({ name, username, email, phone, address }) => {
             </table>
   `;
 
-  const card = document.createElement("div");
   card.classList.add("card");
   card.innerHTML = cardContent;
 

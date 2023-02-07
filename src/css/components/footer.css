@@ -6,3 +6,10 @@ footer {
   padding: var(--spacing-l);
   text-align: center;
 }
+
+.footer__img-container {
+  width: 100px;
+}
+.footer__img-container img {
+  width: 100%;
+}

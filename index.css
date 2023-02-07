@@ -4,6 +4,8 @@
 @import "./src/css/components/cardsSection.css";
 @import "./src/css/components/card.css";
 @import "./src/css/components/footer.css";
+@import "./src/css/components/spinner.css";
+@import "./src/css/components/errorMessage.css";
 
 *,
 *::after,
