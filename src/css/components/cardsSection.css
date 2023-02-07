@@ -1,0 +1,10 @@
+.cards-section {
+  background-color: var(--grey-light);
+  min-height: 70vh;
+  padding: 2rem 0;
+}
+
+.cards-section__h1 {
+  text-align: center;
+  font-weight: 400;
+}

@@ -1,4 +1,8 @@
 @import "./src/css/variables.css";
+@import "./src/css/utils.css";
+@import "./src/css/components/header.css";
+@import "./src/css/components/cardsSection.css";
+@import "./src/css/components/footer.css";
 
 *,
 *::after,

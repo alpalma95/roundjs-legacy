@@ -1,0 +1,8 @@
+footer {
+  padding: var(--spacing-l);
+}
+
+.footer__p {
+  padding: var(--spacing-l);
+  text-align: center;
+}
