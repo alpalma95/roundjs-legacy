@@ -2,6 +2,7 @@
 @import "./src/css/utils.css";
 @import "./src/css/components/header.css";
 @import "./src/css/components/cardsSection.css";
+@import "./src/css/components/card.css";
 @import "./src/css/components/footer.css";
 
 *,
