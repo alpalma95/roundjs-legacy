@@ -22,13 +22,11 @@ export const Card = ({ name, username, email, phone, address }) => {
                   </tr>
                   <tr>
                     <td><i class="fa-solid fa-phone"></i></td>
-
                     <td>Phone</td>
                     <td>${phone}</td>
                   </tr>
                   <tr>
                     <td><i class="fa-solid fa-location-dot"></i></td>
-
                     <td>Address</td>
                     <td>${formatAddress(address)}</td>
                   </tr>
