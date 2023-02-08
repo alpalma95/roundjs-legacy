@@ -5,6 +5,7 @@
   border-radius: var(--border-radius);
   width: min(100%, 30rem);
   margin: 0 auto;
+  grid-column: 1/-1;
 }
 
 .error-message h2 {
