@@ -20,4 +20,4 @@ As for the JavaScript code, it is divided into two separate subfolders: `/utils`
 
 ## Running this project locally
 
-Clone this repository and simply open the index.html with a live server. Since I really wanted to keep things "vanilla", I used [this extension](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer). However, any other extension such as [live-server](https://www.npmjs.com/package/live-server) could work if you decide to initialize a node project.
+Clone this repository and simply open the index.html with a live server. Since I really wanted to keep things "vanilla", I used [this extension](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) for development. However, any other extension such as [live-server](https://www.npmjs.com/package/live-server) could work if you decide to initialize a node project.
