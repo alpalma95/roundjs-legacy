@@ -1,9 +1,9 @@
-import { Observable } from "../../../assets/reactive-wc.js";
+import { Stream } from "../../../assets/reactive-wc.js";
 
 class UserService {
   constructor() {
-    this.users = new Observable([]);
-    this.count = new Observable(0);
+    this.users = new Stream([]);
+    this.count = new Stream(0);
   }
 
   async getUsers() {

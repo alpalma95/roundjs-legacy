@@ -18,13 +18,23 @@ export class ListComponent extends ReactiveWC {
     // so it needs to be called somewhere. Here for instance is a good place.
     
      if (userService.users.value.length <= 0) userService.getUsers();
-    userService.users.subscribe((val) => (this.state.users = val));
+    userService.users.connect(this, (val) => {
+
+      // We can perform any mutation of the value here, in plain JavaScript
+      const filteredVal = val.filter(user => user.id != 4)
+      this.state.users = filteredVal
+    });
 
     // This is increasing the count calling a method within userService. The value is
     // then reflected inside the counter of the cards
     setInterval(() => {
       userService.inc();
     }, 1000);
+  }
+
+  onDestroy() {
+    userService.users.disconnect(this);
+    userService.count.disconnect(this);
   }
 
   render() {

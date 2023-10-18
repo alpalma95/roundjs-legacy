@@ -21,10 +21,15 @@ export class CardComponent extends ReactiveWC {
 
     // Subscribing to the counter just to show how it's possible to share state. 
     // This count is being updated from the list component
-    userService.count.subscribe((val) => {
+    userService.count.connect(this, (val) => {
       this.state.count = val;
     });
 
+  }
+
+  // Don't forget to "unsubscribe"
+  onDestroy() {
+    userService.count.disconnect(this)
   }
 
   watchAttributes(name, _oldValue, newValue) {
