@@ -12,6 +12,9 @@ export class ReactiveWC extends HTMLElement {
     this.watchAttributes(name, JSON.parse(_oldValue), JSON.parse(newValue));
     this.innerHTML = this.render();
   }
+  disconnectedCallback() {
+    this.onDestroy();
+  }
   getProps() {
     this.getAttributeNames().forEach((attr) => {
       if (!attr.startsWith("data_")) return;
@@ -40,10 +43,11 @@ export class ReactiveWC extends HTMLElement {
     });
   }
   onInit() {}
+  onDestroy() {}
   render() {}
 }
 
-export class Observable {
+export class Stream {
   constructor(initialValue) {
     this._initialValue = initialValue;
     this._subscribers = [];
@@ -55,11 +59,18 @@ export class Observable {
 
   set value(newValue) {
     this._initialValue = newValue;
-    this._subscribers.forEach((cb) => cb(this.value));
+    this._subscribers.forEach(({cb}) => cb(this.value));
+    console.log(this._subscribers)
   }
 
-  subscribe(cb) {
+  connect(component, cb) {
     this.value = this._initialValue;
-    this._subscribers.push(cb);
+    this._subscribers.push({component, cb});
+  }
+
+  disconnect(componentToUnsubscribe) {
+    this._subscribers = this._subscribers.filter(
+      ({component}) => component === componentToUnsubscribe
+      )
   }
 }
