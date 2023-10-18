@@ -7,7 +7,6 @@ export class ReactiveWC extends HTMLElement {
     this.onInit();
     this.innerHTML = this.render();
   }
-  defineState() {}
   attributeChangedCallback(name, _oldValue, newValue) {
     this[name] = newValue;
     this.watchAttributes(name, JSON.parse(_oldValue), JSON.parse(newValue));
