@@ -1,79 +1,47 @@
+import { Observable } from "../../../assets/reactive-wc.js";
+
 class UserService {
-
   constructor() {
-    this.users = []
-    this.count = this.reactive(0)
-    this.subscribers = []
-
+    this.users = new Observable([]);
+    this.count = new Observable(0);
   }
 
-  
-
   async getUsers() {
-
     try {
-      if (this.users.length) return this.users;
+      const data = await fetch("https://jsonplaceholder.typicode.com/users");
+      const res = await data.json();
+      this.users.value = res;
 
-      this.users =  (
-        await fetch("https://jsonplaceholder.typicode.com/users")
-      ).json();
+      /* Hardcoded events just to show reactivity in the component using this user list */
+      setTimeout(() => {
+        const newUsers = [
+          ...this.users.value.map((user) => {
+            return user.id === 1
+              ? { ...user, name: "Modified from the service 😉" }
+              : user;
+          }),
+        ];
 
-      this.count.value = 1
-      console.log(this.count.value)
+        this.users.value = newUsers;
+      }, 2000);
 
-      return this.users
-      
-    } catch(err) {
-        console.log(err)
-        return err
+      setTimeout(() => {
+        const newUsers = this.users.value.map((user) => {
+          return user.id === 2 ? { ...user, name: "This as well! 😉" } : user;
+        });
+
+        this.users.value = newUsers;
+      }, 4000);
+      /******************************************************************* */
+    } catch (err) {
+      console.log(err);
+      return err;
     }
-
   }
 
   inc() {
-    this.count.value += 1
+    this.count.value++;
   }
-
-  reactive(object) {
-    // if (object === null || typeof object !== 'object') {
-    //     return object;
-    // }
-
-    // for (const property in object) {
-    //     object[property] = this.reactive(object[property])
-    // }
-
-    const initial = {
-      value: object,
-      subscribers: [],
-      
-      /** @param {HTMLElement} el */
-      subscribe(el) {
-        this.subscribers = [...this.subscribers, el]
-        return this.value
-      }
-    }
-
-    return new Proxy(initial, {
-        get(target, property) {
-          
-            return target[property];
-        },
-        set(target, property, value) {
-            if (target.value != value ) {
-                target.value = value;
-
-                target.subscribers.forEach( el => el.state[property] = value)
-                console.log(target.subscribers)
-                
-               
-            }
-
-            return true;
-        },
-    });
-  }
-
 }
 
 export const userService = new UserService();

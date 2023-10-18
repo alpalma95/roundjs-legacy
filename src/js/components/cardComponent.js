@@ -2,48 +2,46 @@ import { ReactiveWC } from "../../../assets/reactive-wc.js";
 import { userService } from "../services/userService.js";
 
 export class CardComponent extends ReactiveWC {
-  static get observedAttributes() { return ['data_user']}
+  static get observedAttributes() {
+    return ["data_user"];
+  }
 
   constructor() {
     super();
 
+    this.count = 0;
     this.state = this.defineState({
       user: {},
-      count: 0
-    }) 
+      count: 0,
+    });
   }
 
   onInit() {
     this.classList.add("card");
-    this.state.user = {...this.data_user}
-    this.state.count = userService.count.subscribe(this)
+    this.state.user = { ...this.data_user };
 
-    this.addEventListener('click', () => userService.inc)
-
-    setInterval(()=>{
-      userService.inc()
-    }, 1000)
+    userService.count.subscribe((val) => {
+      this.state.count = val;
+    });
   }
 
   watchAttributes(name, _oldValue, newValue) {
-
-    if (name == 'data_user') {
-      this.state.user = newValue
-      
+    if (name == "data_user") {
+      this.state.user = newValue;
     }
   }
 
   formatAddress({ street, suite, city, zipcode }) {
     return `${street}, ${suite}, ${city} ${zipcode}`;
-  };
+  }
 
   render() {
-    return /*html*/`
+    return /*html*/ `
       <table>
           <tbody>
             <tr>
               <td><i class="fa-solid fa-id-card"></i></td>
-              <td>Name  ${this.state.count} </td>
+              <td>Name <strong> ${this.state.count} </strong></td>
               <td class="card__name">${this.state.user.name}</td>
             </tr>
             <tr>
@@ -68,6 +66,6 @@ export class CardComponent extends ReactiveWC {
             </tr>
           </tbody>
       </table>
-    `
+    `;
   }
 }
