@@ -5,13 +5,19 @@ export class ListComponent extends ReactiveWC {
   constructor() {
     super();
 
+    // Technically not necessary, but it'll save us a few "undefined" problems
+    // in the beginning of the application, since this.state.users will be undefined until
+    // onInit method is called
     this.state = this.defineState({
       users: [],
     });
   }
 
   onInit() {
-    userService.getUsers();
+    // No capabilities yet to execute a method call when it has one subscriber,
+    // so it needs to be called somewhere. Here for instance is a good place.
+    
+     if (userService.users.value.length <= 0) userService.getUsers();
     userService.users.subscribe((val) => (this.state.users = val));
 
     // This is increasing the count calling a method within userService. The value is

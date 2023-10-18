@@ -9,7 +9,6 @@ export class CardComponent extends ReactiveWC {
   constructor() {
     super();
 
-    this.count = 0;
     this.state = this.defineState({
       user: {},
       count: 0,
@@ -32,8 +31,6 @@ export class CardComponent extends ReactiveWC {
     if (name == "data_user") {
       this.state.user = newValue;
     }
-
-    
   }
 
   formatAddress({ street, suite, city, zipcode }) {
