@@ -7,7 +7,6 @@ export class ListComponent extends ReactiveWC {
 
     this.state = this.defineState({
       users: [],
-      count: 0,
     });
   }
 
@@ -15,8 +14,8 @@ export class ListComponent extends ReactiveWC {
     userService.getUsers();
     userService.users.subscribe((val) => (this.state.users = val));
 
-    // This is increasing the count from the user service
-    userService.count.subscribe((val) => (this.state.count = val));
+    // This is increasing the count calling a method within userService. The value is
+    // then reflected inside the counter of the cards
     setInterval(() => {
       userService.inc();
     }, 1000);
@@ -36,6 +35,9 @@ export class ListComponent extends ReactiveWC {
       return elements["ERROR_MESSAGE"];
     }
 
+    // This is awfully awkward, I need to change the way we loop,
+    // as well as the way we pass objects as props. In this case,
+    // it is mandatory to pass the prop between single quotation marks.
     return this.state.users
       .map(
         (user) => /*html*/ ` 

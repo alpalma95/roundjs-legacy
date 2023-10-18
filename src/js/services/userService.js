@@ -34,8 +34,8 @@ class UserService {
       }, 4000);
       /******************************************************************* */
     } catch (err) {
-      console.log(err);
-      return err;
+      this.users.value = 'KO'
+      throw new Error(err.message)
     }
   }
 

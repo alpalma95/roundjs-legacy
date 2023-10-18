@@ -20,15 +20,20 @@ export class CardComponent extends ReactiveWC {
     this.classList.add("card");
     this.state.user = { ...this.data_user };
 
+    // Subscribing to the counter just to show how it's possible to share state. 
+    // This count is being updated from the list component
     userService.count.subscribe((val) => {
       this.state.count = val;
     });
+
   }
 
   watchAttributes(name, _oldValue, newValue) {
     if (name == "data_user") {
       this.state.user = newValue;
     }
+
+    
   }
 
   formatAddress({ street, suite, city, zipcode }) {
