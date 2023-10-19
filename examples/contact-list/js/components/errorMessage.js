@@ -1,17 +1,18 @@
-import { ReactiveWC } from "../../../assets/reactive-wc.js";
+import { ReactiveWC } from "../../../../src";
 
 export class ErrorMessage extends ReactiveWC {
-  constructor() {super();}
+  constructor() {
+    super();
+  }
 
   onInit() {
-    this.classList.add('error-message')
+    this.classList.add("error-message");
   }
 
   render() {
-    return /*html*/`
+    return /*html*/ `
       <h2>Something went wrong!</h2>
       <p>Please try again later or contact support if the problem persists.</p>
-    `
+    `;
   }
-
 }

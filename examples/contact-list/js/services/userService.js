@@ -1,4 +1,4 @@
-import { Stream } from "../../../assets/reactive-wc.js";
+import { Stream } from "../../../../src";
 
 class UserService {
   constructor() {
@@ -34,8 +34,8 @@ class UserService {
       }, 4000);
       /******************************************************************* */
     } catch (err) {
-      this.users.value = 'KO'
-      throw new Error(err.message)
+      this.users.value = "KO";
+      throw new Error(err.message);
     }
   }
 

@@ -1,5 +1,5 @@
-import { ReactiveWC } from "../../../assets/reactive-wc.js";
-import { userService } from "../services/userService.js";
+import { ReactiveWC } from "../../../../src";
+import { userService } from "../services/userService";
 
 export class CardComponent extends ReactiveWC {
   static get observedAttributes() {
@@ -19,17 +19,16 @@ export class CardComponent extends ReactiveWC {
     this.classList.add("card");
     this.state.user = { ...this.data_user };
 
-    // Subscribing to the counter just to show how it's possible to share state. 
+    // Subscribing to the counter just to show how it's possible to share state.
     // This count is being updated from the list component
     userService.count.connect(this, (val) => {
       this.state.count = val;
     });
-
   }
 
   // Don't forget to "unsubscribe"
   onDestroy() {
-    userService.count.disconnect(this)
+    userService.count.disconnect(this);
   }
 
   watchAttributes(name, _oldValue, newValue) {

@@ -1,5 +1,5 @@
-import { ReactiveWC } from "../../../assets/reactive-wc.js";
-import { userService } from "../services/userService.js";
+import { ReactiveWC } from "../../../../src";
+import { userService } from "../services/userService";
 
 export class ListComponent extends ReactiveWC {
   constructor() {
@@ -16,13 +16,12 @@ export class ListComponent extends ReactiveWC {
   onInit() {
     // No capabilities yet to execute a method call when it has one subscriber,
     // so it needs to be called somewhere. Here for instance is a good place.
-    
-     if (userService.users.value.length <= 0) userService.getUsers();
-    userService.users.connect(this, (val) => {
 
+    if (userService.users.value.length <= 0) userService.getUsers();
+    userService.users.connect(this, (val) => {
       // We can perform any mutation of the value here, in plain JavaScript
-      const filteredVal = val.filter(user => user.id != 4)
-      this.state.users = filteredVal
+      const filteredVal = val.filter((user) => user.id != 4);
+      this.state.users = filteredVal;
     });
 
     // This is increasing the count calling a method within userService. The value is

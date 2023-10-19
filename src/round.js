@@ -59,18 +59,17 @@ export class Stream {
 
   set value(newValue) {
     this._initialValue = newValue;
-    this._subscribers.forEach(({cb}) => cb(this.value));
-    console.log(this._subscribers)
+    this._subscribers.forEach(({ cb }) => cb(this.value));
   }
 
   connect(component, cb) {
     this.value = this._initialValue;
-    this._subscribers.push({component, cb});
+    this._subscribers.push({ component, cb });
   }
 
   disconnect(componentToUnsubscribe) {
     this._subscribers = this._subscribers.filter(
-      ({component}) => component === componentToUnsubscribe
-      )
+      ({ component }) => component === componentToUnsubscribe
+    );
   }
 }
