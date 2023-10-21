@@ -1,5 +1,6 @@
 import { ReactiveWC } from "../../../../src";
 import { userService } from "../services/userService";
+import { html } from "../../../../src";
 
 export class ListComponent extends ReactiveWC {
   constructor() {
@@ -17,7 +18,7 @@ export class ListComponent extends ReactiveWC {
     // No capabilities yet to execute a method call when it has one subscriber,
     // so it needs to be called somewhere. Here for instance is a good place.
 
-    if (userService.users.value.length <= 0) userService.getUsers();
+    userService.getUsers();
     userService.users.connect(this, (val) => {
       // We can perform any mutation of the value here, in plain JavaScript
       const filteredVal = val.filter((user) => user.id != 4);
@@ -38,8 +39,8 @@ export class ListComponent extends ReactiveWC {
 
   render() {
     const elements = {
-      SPINNER: /*html*/ `<div class="spinner"></div>`,
-      ERROR_MESSAGE: /*html*/ `<error-message></error-message>`,
+      SPINNER: html`<div class="spinner"></div>`,
+      ERROR_MESSAGE: html`<error-message></error-message>`,
     };
 
     if (this.state.users.length == 0) {
@@ -50,19 +51,8 @@ export class ListComponent extends ReactiveWC {
       return elements["ERROR_MESSAGE"];
     }
 
-    // This is awfully awkward, I need to change the way we loop,
-    // as well as the way we pass objects as props. In this case,
-    // it is mandatory to pass the prop between single quotation marks.
-    return this.state.users
-      .map(
-        (user) => /*html*/ ` 
-        
-            <card-component data_user='${JSON.stringify(
-              user
-            )}'></card-component>
-            
-            `
-      )
-      .join(" ");
+    return html`${this.state.users.map(
+      (user) => html`<card-component data_user="${user}"></card-component>`
+    )}`;
   }
 }

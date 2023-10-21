@@ -35,7 +35,6 @@ class UserService {
       /******************************************************************* */
     } catch (err) {
       this.users.value = "KO";
-      throw new Error(err.message);
     }
   }
 

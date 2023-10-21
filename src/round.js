@@ -5,15 +5,25 @@ export class ReactiveWC extends HTMLElement {
   connectedCallback() {
     this.getProps();
     this.onInit();
-    this.innerHTML = this.render();
+    this.update();
   }
   attributeChangedCallback(name, _oldValue, newValue) {
     this[name] = newValue;
     this.watchAttributes(name, JSON.parse(_oldValue), JSON.parse(newValue));
-    this.innerHTML = this.render();
+    this.update();
   }
   disconnectedCallback() {
     this.onDestroy();
+  }
+  update() {
+    this.innerHTML = "";
+
+    const innerHTML = this.render();
+    if (Array.isArray(innerHTML)) {
+      innerHTML.forEach((el) => this.appendChild(el));
+    } else {
+      this.appendChild(innerHTML);
+    }
   }
   getProps() {
     this.getAttributeNames().forEach((attr) => {
@@ -36,7 +46,7 @@ export class ReactiveWC extends HTMLElement {
       set: (target, property, value) => {
         if (target[property] !== value) {
           target[property] = value;
-          this.innerHTML = this.render();
+          this.update();
         }
         return true;
       },

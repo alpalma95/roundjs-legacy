@@ -1,4 +1,5 @@
 import { ReactiveWC } from "../../../../src";
+import { html } from "../../../../src";
 
 export class ErrorMessage extends ReactiveWC {
   constructor() {
@@ -10,7 +11,7 @@ export class ErrorMessage extends ReactiveWC {
   }
 
   render() {
-    return /*html*/ `
+    return html`
       <h2>Something went wrong!</h2>
       <p>Please try again later or contact support if the problem persists.</p>
     `;
