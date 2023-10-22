@@ -3,7 +3,7 @@ import { userService } from "../services/userService";
 
 export class CardComponent extends ReactiveWC {
   static get observedAttributes() {
-    return ["data_user"];
+    return [":user"];
   }
 
   constructor() {
@@ -17,15 +17,14 @@ export class CardComponent extends ReactiveWC {
 
   onInit() {
     this.classList.add("card");
-    console.log(this.data_user);
     this.state.user = {
-      ...this.data_user,
+      ...this.user,
     };
 
     // Subscribing to the counter just to show how it's possible to share state.
     // This count is being updated from the list component
     userService.count.connect(this, (val) => {
-      this.state.count = val;
+      this.state.count = val + this.initial_count;
     });
   }
 
@@ -35,7 +34,7 @@ export class CardComponent extends ReactiveWC {
   }
 
   watchAttributes(name, _oldValue, newValue) {
-    if (name == "data_user") {
+    if (name == "user") {
       this.state.user = newValue;
     }
   }

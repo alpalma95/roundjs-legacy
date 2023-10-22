@@ -52,7 +52,11 @@ export class ListComponent extends ReactiveWC {
     }
 
     return html`${this.state.users.map(
-      (user) => html`<card-component data_user="${user}"></card-component>`
+      (user, i) =>
+        html`<card-component
+          :initial_count=${i + 1}
+          :user="${user}"
+        ></card-component>`
     )}`;
   }
 }

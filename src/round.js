@@ -8,8 +8,12 @@ export class ReactiveWC extends HTMLElement {
     this.update();
   }
   attributeChangedCallback(name, _oldValue, newValue) {
-    this[name] = newValue;
-    this.watchAttributes(name, JSON.parse(_oldValue), JSON.parse(newValue));
+    this[name.slice(1)] = newValue;
+    this.watchAttributes(
+      name.slice(1),
+      JSON.parse(_oldValue),
+      JSON.parse(newValue)
+    );
     this.update();
   }
   disconnectedCallback() {
@@ -27,8 +31,8 @@ export class ReactiveWC extends HTMLElement {
   }
   getProps() {
     this.getAttributeNames().forEach((attr) => {
-      if (!attr.startsWith("data_")) return;
-      this[attr] = JSON.parse(this.getAttribute(attr));
+      if (!attr.startsWith(":")) return;
+      this[attr.slice(1)] = JSON.parse(this.getAttribute(attr));
     });
   }
   watchAttributes(name, _oldValue, newValue) {}
