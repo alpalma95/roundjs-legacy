@@ -30,7 +30,13 @@ export class ReactiveWC extends HTMLElement {
     const innerHTML = this.render();
     if (Array.isArray(innerHTML)) {
       const sanitizedArray = filterEmptyStrings(innerHTML);
-      sanitizedArray.forEach((el) => root.appendChild(el));
+      sanitizedArray.forEach((el) => {
+        if (Array.isArray(el)) {
+          el.forEach(el => root.appendChild(el))
+        } else {
+          root.appendChild(el)
+        }
+      });
     } else {
       root.appendChild(innerHTML);
     }

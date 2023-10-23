@@ -10,7 +10,7 @@ function parseDOM(element, attributes, ...children) {
         newElement.setAttribute(key, JSON.stringify(value));
       } else if (typeof value === "function") {
         newElement.addEventListener(key.slice(1), value);
-        newElement.setAttribute(`${key.slice(1)}`, value.name);
+        newElement.setAttribute(`${key.slice(1)}`, value);
       } else {
         newElement.setAttribute(key, value);
       }
