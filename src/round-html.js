@@ -1,6 +1,8 @@
 import htm from "htm/mini";
+import { filterEmptyStrings } from "./utils";
 
 function parseDOM(element, attributes, ...children) {
+
   const newElement = document.createElement(element);
   if (attributes) {
     for (const [key, value] of Object.entries(attributes)) {
@@ -17,7 +19,7 @@ function parseDOM(element, attributes, ...children) {
   if (children) {
     children.forEach((ch) => {
       if (Array.isArray(ch)) {
-        const sanitizedArray = ch.filter((el) => el != " ");
+        const sanitizedArray = filterEmptyStrings(ch);
 
         sanitizedArray.forEach((el) => newElement.appendChild(el));
         return;

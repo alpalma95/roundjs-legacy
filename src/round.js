@@ -1,3 +1,5 @@
+import { filterEmptyStrings } from "./utils";
+
 export class ReactiveWC extends HTMLElement {
   constructor() {
     super();
@@ -27,7 +29,8 @@ export class ReactiveWC extends HTMLElement {
 
     const innerHTML = this.render();
     if (Array.isArray(innerHTML)) {
-      innerHTML.forEach((el) => root.appendChild(el));
+      const sanitizedArray = filterEmptyStrings(innerHTML);
+      sanitizedArray.forEach((el) => root.appendChild(el));
     } else {
       root.appendChild(innerHTML);
     }
