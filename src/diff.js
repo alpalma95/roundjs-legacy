@@ -1,11 +1,11 @@
 import { appendDOM } from "./utils";
 
 export const getVDOM = (element) => {
-    const parser = new DOMParser();
-    const root =  parser.parseFromString('', 'text/html').body
-    const innerHTML = element.render();
-    appendDOM(root, innerHTML);
-    return root
+	const parser = new DOMParser();
+	const root = parser.parseFromString('', 'text/html').body
+	const innerHTML = element.render();
+	appendDOM(root, innerHTML);
+	return root
 }
 
 const getNodeType = function (node) {
@@ -20,34 +20,34 @@ const getNodeContent = function (node) {
 };
 
 const attrbutesIndex = function (el) {
-  var attributes = {};
-  if (el.attributes == undefined) return attributes;
-  for (var i = 0, atts = el.attributes, n = atts.length; i < n; i++) {
-      attributes[atts[i].name] = atts[i].value;
-  }
-  return attributes;
+	var attributes = {};
+	if (el.attributes == undefined) return attributes;
+	for (var i = 0, atts = el.attributes, n = atts.length; i < n; i++) {
+		attributes[atts[i].name] = atts[i].value;
+	}
+	return attributes;
 }
 
 /** Credits: [Joydeep](https://dev.to/joydeep-bhowmik/virtual-dom-diffing-algorithm-implementation-in-vanilla-javascript-2324) */
 const patchAttributes = function (vdom, dom) {
-  let vdomAttributes = attrbutesIndex(vdom);
-  let domAttributes = attrbutesIndex(dom);
-  if (vdomAttributes == domAttributes) return;
-  Object.keys(vdomAttributes).forEach((key) => {
-      if (!dom.getAttribute(key)) {
-          dom.setAttribute(key, vdomAttributes[key]);
-      } 
-      else if (dom.getAttribute(key)) {
-          if (vdomAttributes[key] != domAttributes[key]) {
-              dom.setAttribute(key, vdomAttributes[key]);
-          }
-      }
-  });
-  Object.keys(domAttributes).forEach((key) => {
-      if (!vdom.getAttribute(key)) {
-          dom.removeAttribute(key);
-      }
-  });
+	let vdomAttributes = attrbutesIndex(vdom);
+	let domAttributes = attrbutesIndex(dom);
+	if (vdomAttributes == domAttributes) return;
+	Object.keys(vdomAttributes).forEach((key) => {
+		if (!dom.getAttribute(key)) {
+			dom.setAttribute(key, vdomAttributes[key]);
+		}
+		else if (dom.getAttribute(key)) {
+			if (vdomAttributes[key] != domAttributes[key]) {
+				dom.setAttribute(key, vdomAttributes[key]);
+			}
+		}
+	});
+	Object.keys(domAttributes).forEach((key) => {
+		if (!vdom.getAttribute(key)) {
+			dom.removeAttribute(key);
+		}
+	});
 }
 
 /** Credits: [Go Make Things](https://gomakethings.com/dom-diffing-with-vanilla-js/) */
@@ -94,10 +94,8 @@ export const diff = function (template, elem) {
 
 		if (node.childNodes.length > 0) {
 			diff(node, domNodes[index]);
-      patchAttributes(node, domNodes[index])
+			patchAttributes(node, domNodes[index])
 		}
-
-
 
 	});
 
