@@ -1,4 +1,5 @@
-import { filterEmptyStrings } from "./utils";
+import { getVDOM, diff } from "./diff";
+import { appendDOM } from "./utils";
 
 export class ReactiveWC extends HTMLElement {
   constructor() {
@@ -7,7 +8,7 @@ export class ReactiveWC extends HTMLElement {
   connectedCallback() {
     this.getProps();
     this.onInit();
-    this.update();
+    this.firstRender();
   }
   attributeChangedCallback(name, oldValue, newValue) {
     name.startsWith(":")
@@ -23,23 +24,16 @@ export class ReactiveWC extends HTMLElement {
   disconnectedCallback() {
     this.onDestroy();
   }
-  update() {
+  firstRender() {
     const root = this.shadowRoot ? this.shadowRoot : this;
     root.innerHTML = "";
 
     const innerHTML = this.render();
-    if (Array.isArray(innerHTML)) {
-      const sanitizedArray = filterEmptyStrings(innerHTML);
-      sanitizedArray.forEach((el) => {
-        if (Array.isArray(el)) {
-          el.forEach(el => root.appendChild(el))
-        } else {
-          root.appendChild(el)
-        }
-      });
-    } else {
-      root.appendChild(innerHTML);
-    }
+    appendDOM(root, innerHTML)
+  }
+  update() {
+    const vdom = getVDOM(this)
+    diff(vdom, this)
   }
 
   getProps() {
@@ -63,12 +57,16 @@ export class ReactiveWC extends HTMLElement {
       set: (target, property, value) => {
         if (target[property] !== value) {
           target[property] = value;
-          this.update();
+          
+          this.update()
+         
+
         }
         return true;
       },
     });
   }
+
   onInit() {}
   onDestroy() {}
   render() {}

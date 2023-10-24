@@ -1,6 +1,7 @@
 import htm from "htm/mini";
 import { html } from "./src/round-html";
 import { ReactiveWC } from "./src/round";
+import { getVDOM } from "./src/diff";
 
 function h(element, attributes, ...children) {
     console.log(element, attributes, children)
@@ -24,35 +25,28 @@ class Test extends ReactiveWC {
                 }
             ]
         })
-        this.attachShadow({mode: "open"})
-    }
-
-    onInit() {
-        const test = this.shadowRoot.innerHTML
-        console.log(test)
-
     }
 
     // This must be a fat arrow function, otherwise we'll need to remember
     // to bind the method to this.
     inc = (num) => {
         this.state.count += num
-               
+        const newItem = {
+            id: this.state.count,
+            text: `Item ${this.state.count}`
+        }
+        this.state.items = [...this.state.items, newItem] 
     }
 
     render() {
         return html`
-            <h1>Hi there</h1>
+            <h1 :text=${this.state.count}>Hi there</h1>
             <p>This is a counter: ${this.state.count}</p>
             <button @click=${()=>this.inc(3)}>Inc</button>
-            <slot name="test"></slot>
-            <!-- check why this doesn't work outside outter element -->
-            ${ this.state.items.map(item => html`<li>No: ${item.id}, ${item.text} </li>`) }
 
             <ul>
+                ${ this.state.items.map(item => html`<li style="${item.id % 2 === 0 ? 'color: red;' : ""}">No: ${item.id}, ${item.text} </li>`) }
             </ul>
-            
-
         `
     }
 }
@@ -60,4 +54,5 @@ class Test extends ReactiveWC {
 window.customElements.define('test-test', Test)
 
 const t = new Test()
-console.log(t.render())
+const test1 = t.render();
+const test2 = t.render();

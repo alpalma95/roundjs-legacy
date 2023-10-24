@@ -1,7 +1,7 @@
 import htm from "htm/mini";
 import { filterEmptyStrings } from "./utils";
 
-function parseDOM(element, attributes, ...children) {
+function buildDOM(element, attributes, ...children) {
 
   const newElement = document.createElement(element);
   if (attributes) {
@@ -37,4 +37,5 @@ function parseDOM(element, attributes, ...children) {
 
   return newElement;
 }
-export const html = htm.bind(parseDOM);
+
+export const html = htm.bind(buildDOM);
