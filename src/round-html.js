@@ -2,7 +2,6 @@ import htm from "htm/mini";
 import { filterEmptyStrings } from "./utils";
 
 function buildDOM(element, attributes, ...children) {
-
   const newElement = document.createElement(element);
   if (attributes) {
     for (const [key, value] of Object.entries(attributes)) {
@@ -20,21 +19,17 @@ function buildDOM(element, attributes, ...children) {
     children.forEach((ch) => {
       if (Array.isArray(ch)) {
         const sanitizedArray = filterEmptyStrings(ch);
-
         sanitizedArray.forEach((el) => newElement.appendChild(el));
         return;
       }
-
       if (typeof ch !== "object") {
         const text = document.createTextNode(ch);
         newElement.appendChild(text);
         return;
       }
-
       newElement.appendChild(ch);
     });
   }
-
   return newElement;
 }
 
