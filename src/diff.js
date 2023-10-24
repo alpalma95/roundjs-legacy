@@ -8,6 +8,14 @@ export const getVDOM = (element) => {
 	return root
 }
 
+export const getVDOMAsync = (element) => {
+	
+	return new Promise((resolve, _reject) => {
+		const vdom = getVDOM(element)
+		resolve(vdom)
+	})
+}
+
 const getNodeType = function (node) {
 	if (node.nodeType === 3) return 'text';
 	if (node.nodeType === 8) return 'comment';
@@ -100,3 +108,10 @@ export const diff = function (template, elem) {
 	});
 
 };
+
+export const diffAsync = function (template, elem) {
+	return new Promise((resolve, _reject) => {
+		diff(template, elem);
+		resolve();
+	})
+}
