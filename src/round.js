@@ -26,7 +26,6 @@ export class ReactiveWC extends HTMLElement {
   }
   firstRender() {
     const root = this.shadowRoot ? this.shadowRoot : this;
-    root.innerHTML = "";
 
     const innerHTML = this.render();
     appendDOM(root, innerHTML)
@@ -58,16 +57,12 @@ export class ReactiveWC extends HTMLElement {
       set: (target, property, value) => {
         if (target[property] !== value) {
           target[property] = value;
-          
           this.update()
-         
-
         }
         return true;
       },
     });
   }
-
   onInit() {}
   onDestroy() {}
   render() {}
