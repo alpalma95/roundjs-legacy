@@ -4,7 +4,6 @@ import { appendDOM } from "./utils";
 export class ReactiveWC extends HTMLElement {
   constructor() {
     super();
-    this.attachShadow({mode: "open"})
   }
   connectedCallback() {
     this.getProps();
