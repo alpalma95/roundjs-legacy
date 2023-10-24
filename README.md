@@ -11,13 +11,14 @@ Two-classes abstraction over native Web Components API.
 This is basically Vanilla JS. It only provides:
 
 - Reactive state with the `this.defineState()` method
-- Attributes passed as "props" (`:attr` syntax) can be automatically accessed via `this.whatever`
+
+> This is now done with a cheap implementation of "virtual DOM" and DOM diffing 🙌
+
+- Attributes passed as "props" (`:attr` syntax) can be automatically accessed via `this.attr`
 - Observable-like object to share state between components (`Streams`)
 - Templating syntax based on tagged template strings. This allows us to do things more similarly to JSX and even attach event listeners inline (`@click` etc.)
 
-For the rest, just use JavaScript. ~~Even attaching event listeners must be done with `EventTarget.addEventListener()`~~.
-
-> Actually, with the latest commit I implemented a "smarter" templating system (quote unquote, still have to make it smart enough) and we can now add event listeners like in modern libraries with `@event` directive 🙌
+For the rest, just use JavaScript.
 
 A quick look to the code must be enough to notice this, but just in case: **NOT READY FOR PRODUCTION, PROBABLY WON'T BE AND WHY WOULD YOU NEED YET ANOTHER LIBRARY**.
 
@@ -30,11 +31,16 @@ _Nonetheless_, I'm always open to feedback. As soon as I have the docs ready and
 Things I'm planning to address in the following weeks:
 
 - [ ] Write docs with the current status
-- [ ] Add type annotations and comments for better DX
+- [ ] Add type annotations
 - [ ] Build stuff and take notes about things I'd like to address
 - [ ] Write tests
+- [ ] DOM diffing
+  - [x] Automatic render of virtual dom
+  - [x] Diffing will update only the parts of the DOM that have actually changed
+  - [x] Diffing capabilities when element has shadow root
+  - [ ] Promisify DOM updates
+  - [ ] Take custom elements' children out of the diff tree, as they should handle their own children
 - [x] Add "template engine" with the help of [htm](https://github.com/developit/htm)
-  - Note: It is pretty basic and sometimes buggy. I'm working on it to make it more solid.
-- [x] Brag about it 'cause hell I'm proud (just invested a couple of [working] days so... well...)
+- [x] Attach event listeners with `@event` directive
 
 Thanks for reading 🙂
