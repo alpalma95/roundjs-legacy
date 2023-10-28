@@ -2,6 +2,7 @@ import htm from "htm/mini";
 import { html } from "./src/round-html";
 import { ReactiveWC } from "./src/round";
 import { getVDOM } from "./src/diff";
+import { registerEvent } from "./src/utils";
 
 function h(element, attributes, ...children) {
   console.log(element, attributes, children);
@@ -14,8 +15,21 @@ class Test extends ReactiveWC {
     super();
     this.state = this.defineState({
       count: 0,
-      items: [],
+      items: [
+        {
+          id: 1,
+          text: "Item 1",
+        },
+        {
+          id: 2,
+          text: "Item 2",
+        },
+      ],
     });
+  }
+
+  test() {
+    return (e) => console.log(e.target);
   }
 
   // This must be a fat arrow function, otherwise we'll need to remember
@@ -33,17 +47,46 @@ class Test extends ReactiveWC {
     return html`
       <h1 :text=${this.state.count}>Hi there</h1>
       <p>This is a counter: ${this.state.count}</p>
-      <button @click=${() => this.inc(3)}>Inc</button>
+      <button
+        :key="inc_button"
+        click=${registerEvent(this, {
+          type: "click",
+          cb: () => this.inc(3),
+          target: "inc_button",
+        })}
+        mouseover=${registerEvent(this, {
+          type: "mouseover",
+          cb: () => this.inc(3),
+          target: "inc_button",
+        })}
+      >
+        Inc + 3
+      </button>
 
       <ul>
         ${this.state.items.map(
           (item) =>
             html`<li
-              @click="${() => console.log(item)}"
+              :key="${item.id}"
+              click="${registerEvent(this, {
+                type: "click",
+                cb: () => console.log(item.id),
+                target: item.id,
+              })}"
               style="${item.id % 2 === 0 ? "color: red;" : ""}"
             >
               No: ${item.id}, ${item.text}
-              <button>log item ${item.id}</button>
+              <button
+                :key="${item.id * 0.1}"
+                click="${registerEvent(this, {
+                  type: "click",
+                  cb: () => console.log(item.id + "From button!"),
+                  target: item.id * 0.1,
+                })}"
+                style="${item.id % 2 === 0 ? "color: red;" : ""}"
+              >
+                log item ${item.id}
+              </button>
             </li>`
         )}
       </ul>

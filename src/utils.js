@@ -31,7 +31,7 @@ export const appendDOM = (root, innerHTML) => {
  */
 export const rehydratedNode = (vdomNode) => {
   const clone = vdomNode.cloneNode(true);
-  const virtualNodeChildren = Array.prototype.slice.call(vdomNode.childNodes);
+  const original = Array.prototype.slice.call(vdomNode.childNodes);
 
   // check if node has any attribute "@"
 
@@ -42,4 +42,33 @@ export const rehydratedNode = (vdomNode) => {
   // children.forEach => rehydratedNode child
 
   return clone;
+};
+
+const track = [];
+/**
+ *
+ * @param {HTMLElement} node HTMLElement to which we want to add the event listener
+ * @param {{type: string, cb: ()=> {}, target: string}} event Object containing type of event and callback
+ * @param {object} options
+ * @returns
+ */
+export const registerEvent = (node, event, options = {}) => {
+  const eventIsRegistered = track.some(
+    (registry) =>
+      registry.node == node &&
+      registry.event.type == event.type &&
+      registry.event.target === event.target
+  );
+
+  if (eventIsRegistered) return;
+
+  track.push({ node, event });
+  console.log(track);
+  // console.log(event.target);
+  // console.log(track);
+  // console.log(`${node.tagName.toLocaleLowerCase()} ${event.target}`);
+  const handler = ($event) => {
+    if ($event.target.getAttribute(":key") == event.target) event.cb();
+  };
+  return node.addEventListener(event.type, handler, options);
 };
