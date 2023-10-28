@@ -76,10 +76,10 @@ export const diff = function (template, elem) {
   }
 
   templateNodes.forEach(function (node, index) {
-    patchAttributes(node, domNodes[index]);
     if (!domNodes[index]) {
       const clone = rehydratedNode(node);
       elem.appendChild(clone);
+
       return;
     }
 
@@ -99,6 +99,8 @@ export const diff = function (template, elem) {
       domNodes[index].textContent = templateContent;
     }
 
+    if (isCustomElement(domNodes[index]))
+      patchAttributes(node, domNodes[index]);
     if (
       domNodes[index].childNodes.length > 0 &&
       node.childNodes.length < 1 &&
