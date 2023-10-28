@@ -15,6 +15,10 @@ export const getVDOMAsync = (element) => {
   });
 };
 
+const isCustomElement = function (node) {
+  return node.tagName?.includes("-");
+};
+
 const getNodeType = function (node) {
   if (node.nodeType === 3) return "text";
   if (node.nodeType === 8) return "comment";
@@ -58,9 +62,12 @@ const patchAttributes = function (vdom, dom) {
 
 /** Credits: [Go Make Things](https://gomakethings.com/dom-diffing-with-vanilla-js/) */
 export const diff = function (template, elem) {
+  console.log(isCustomElement(elem));
+
   const domNodes = Array.prototype.slice.call(elem.childNodes);
   const templateNodes = Array.prototype.slice.call(template.childNodes);
-
+  console.log(domNodes);
+  console.log(templateNodes);
   let count = domNodes.length - templateNodes.length;
   if (count > 0) {
     for (; count > 0; count--) {
@@ -72,12 +79,16 @@ export const diff = function (template, elem) {
 
   templateNodes.forEach(function (node, index) {
     if (!domNodes[index]) {
+      console.log(isCustomElement(node));
+
       const clone = rehydratedNode(node);
       elem.appendChild(clone);
       return;
     }
 
     if (getNodeType(node) !== getNodeType(domNodes[index])) {
+      console.log(isCustomElement(node));
+
       domNodes[index].parentNode.replaceChild(
         node.cloneNode(true),
         domNodes[index]
@@ -90,15 +101,21 @@ export const diff = function (template, elem) {
       templateContent &&
       templateContent !== getNodeContent(domNodes[index])
     ) {
+      console.log(isCustomElement(node));
+
       domNodes[index].textContent = templateContent;
     }
 
     if (domNodes[index].childNodes.length > 0 && node.childNodes.length < 1) {
+      console.log(isCustomElement(node));
+
       domNodes[index].innerHTML = "";
       return;
     }
 
     if (domNodes[index].childNodes.length < 1 && node.childNodes.length > 0) {
+      console.log();
+
       const fragment = document.createDocumentFragment();
       diff(node, fragment);
       domNodes[index].appendChild(fragment);
@@ -106,6 +123,7 @@ export const diff = function (template, elem) {
     }
 
     if (node.childNodes.length > 0) {
+      console.log(isCustomElement(domNodes[index]));
       diff(node, domNodes[index]);
       patchAttributes(node, domNodes[index]);
     }

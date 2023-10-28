@@ -62,7 +62,7 @@ class Test extends ReactiveWC {
       >
         Inc + 3
       </button>
-
+      <b-b></b-b>
       <ul>
         ${this.state.items.map(
           (item) =>
@@ -95,6 +95,17 @@ class Test extends ReactiveWC {
 }
 
 window.customElements.define("test-test", Test);
+
+class B extends ReactiveWC {
+  constructor() {
+    super();
+  }
+
+  render() {
+    return html`<h1>Hello from B component</h1>`;
+  }
+}
+window.customElements.define("b-b", B);
 
 const t = new Test();
 const test1 = t.render();

@@ -1,4 +1,5 @@
 import { getVDOMAsync, diffAsync } from "./diff";
+import { buildDOM } from "./round-html";
 import { appendDOM } from "./utils";
 
 export class ReactiveWC extends HTMLElement {
@@ -27,11 +28,11 @@ export class ReactiveWC extends HTMLElement {
   firstRender() {
     const root = this.shadowRoot ? this.shadowRoot : this;
 
-    const innerHTML = this.render();
+    const innerHTML = buildDOM(this.render());
     appendDOM(root, innerHTML);
   }
   async update() {
-    const vdom = await getVDOMAsync(this);
+    const vdom = buildDOM(this.render());
     const dom = this.shadowRoot ? this.shadowRoot : this;
     await diffAsync(vdom, dom);
   }
