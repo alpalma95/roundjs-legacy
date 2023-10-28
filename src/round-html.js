@@ -8,7 +8,8 @@ function buildDOM(element, attributes, ...children) {
       if (typeof value === "object") {
         newElement.setAttribute(key, JSON.stringify(value));
       } else if (typeof value === "function") {
-        newElement.addEventListener(key.slice(1), value);
+        // newElement.addEventListener(key.slice(1), value);
+        newElement[`on${key.slice(1)}`] = value;
         newElement.setAttribute(`${key.slice(1)}`, value);
       } else {
         newElement.setAttribute(key, value);

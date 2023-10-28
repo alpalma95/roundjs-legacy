@@ -1,4 +1,4 @@
-import { getVDOM, diff, getVDOMAsync, diffAsync } from "./diff";
+import { getVDOMAsync, diffAsync } from "./diff";
 import { appendDOM } from "./utils";
 
 export class ReactiveWC extends HTMLElement {
@@ -28,12 +28,12 @@ export class ReactiveWC extends HTMLElement {
     const root = this.shadowRoot ? this.shadowRoot : this;
 
     const innerHTML = this.render();
-    appendDOM(root, innerHTML)
+    appendDOM(root, innerHTML);
   }
   async update() {
-    const vdom = await getVDOMAsync(this)
-    const dom = this.shadowRoot ? this.shadowRoot : this
-    await diffAsync(vdom, dom)
+    const vdom = await getVDOMAsync(this);
+    const dom = this.shadowRoot ? this.shadowRoot : this;
+    await diffAsync(vdom, dom);
   }
 
   getProps() {
@@ -57,7 +57,7 @@ export class ReactiveWC extends HTMLElement {
       set: (target, property, value) => {
         if (target[property] !== value) {
           target[property] = value;
-          this.update()
+          this.update();
         }
         return true;
       },
