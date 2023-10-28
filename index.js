@@ -62,7 +62,7 @@ class Test extends ReactiveWC {
       >
         Inc + 3
       </button>
-      <b-b></b-b>
+      <b-b test="${this.state.count}"></b-b>
       <ul>
         ${this.state.items.map(
           (item) =>
@@ -102,7 +102,11 @@ class B extends ReactiveWC {
   }
 
   render() {
-    return html`<h1>Hello from B component</h1>`;
+    return html`
+      <div style="background-color: red;">
+        <h1>Hello from B component <i>ss</i></h1>
+      </div>
+    `;
   }
 }
 window.customElements.define("b-b", B);

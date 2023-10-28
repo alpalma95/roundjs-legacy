@@ -15,7 +15,7 @@ export const getVDOMAsync = (element) => {
   });
 };
 
-const isCustomElement = function (node) {
+export const isCustomElement = function (node) {
   return node.tagName?.includes("-");
 };
 
@@ -62,8 +62,6 @@ const patchAttributes = function (vdom, dom) {
 
 /** Credits: [Go Make Things](https://gomakethings.com/dom-diffing-with-vanilla-js/) */
 export const diff = function (template, elem) {
-  console.log(isCustomElement(elem));
-
   const domNodes = Array.prototype.slice.call(elem.childNodes);
   const templateNodes = Array.prototype.slice.call(template.childNodes);
   console.log(domNodes);
@@ -78,17 +76,14 @@ export const diff = function (template, elem) {
   }
 
   templateNodes.forEach(function (node, index) {
+    patchAttributes(node, domNodes[index]);
     if (!domNodes[index]) {
-      console.log(isCustomElement(node));
-
       const clone = rehydratedNode(node);
       elem.appendChild(clone);
       return;
     }
 
     if (getNodeType(node) !== getNodeType(domNodes[index])) {
-      console.log(isCustomElement(node));
-
       domNodes[index].parentNode.replaceChild(
         node.cloneNode(true),
         domNodes[index]
@@ -101,21 +96,19 @@ export const diff = function (template, elem) {
       templateContent &&
       templateContent !== getNodeContent(domNodes[index])
     ) {
-      console.log(isCustomElement(node));
-
       domNodes[index].textContent = templateContent;
     }
 
-    if (domNodes[index].childNodes.length > 0 && node.childNodes.length < 1) {
-      console.log(isCustomElement(node));
-
+    if (
+      domNodes[index].childNodes.length > 0 &&
+      node.childNodes.length < 1 &&
+      !isCustomElement(domNodes[index])
+    ) {
       domNodes[index].innerHTML = "";
       return;
     }
 
     if (domNodes[index].childNodes.length < 1 && node.childNodes.length > 0) {
-      console.log();
-
       const fragment = document.createDocumentFragment();
       diff(node, fragment);
       domNodes[index].appendChild(fragment);

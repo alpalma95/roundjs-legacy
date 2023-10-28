@@ -31,7 +31,6 @@ export const appendDOM = (root, innerHTML) => {
  */
 export const rehydratedNode = (vdomNode) => {
   const clone = vdomNode.cloneNode(true);
-  const original = Array.prototype.slice.call(vdomNode.childNodes);
 
   // check if node has any attribute "@"
 
