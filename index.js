@@ -1,14 +1,6 @@
-import htm from "htm/mini";
 import { html } from "./src/round-html";
 import { ReactiveWC } from "./src/round";
-import { getVDOM } from "./src/diff";
-import { registerEvent } from "./src/utils";
-
-function h(element, attributes, ...children) {
-  console.log(element, attributes, children);
-  return { element, attributes, children };
-}
-const test = htm.bind(h);
+import { registerEvent } from "./src/";
 
 class Test extends ReactiveWC {
   constructor() {
@@ -29,7 +21,7 @@ class Test extends ReactiveWC {
   }
 
   inc(num) {
-    this.state.count += num;
+    this.state.count++;
     const newItem = {
       id: this.state.count,
       text: `Item ${this.state.count}`,
@@ -48,15 +40,15 @@ class Test extends ReactiveWC {
 
       <p>This is a counter: ${this.state.count}</p>
       <button
-        e-key="inc_button"
+        id="inc_button"
         click="${registerEvent(this, {
           type: "click",
-          cb: () => this.inc(3),
+          cb: this.inc,
           target: "inc_button",
         })}"
         mouseover="${registerEvent(this, {
           type: "mouseover",
-          cb: () => this.inc(3),
+          cb: () => this.inc(),
           target: "inc_button",
         })}"
       >
@@ -68,13 +60,12 @@ class Test extends ReactiveWC {
             html`<li style="${item.id % 2 === 0 ? "color: red;" : ""}">
               No: ${item.id}, ${item.text}
               <button
-                e-key="${item.id}"
-                click="${registerEvent(this, {
+                :key="${item.id}"
+                @click="${registerEvent(this, {
                   type: "click",
                   cb: ($event) => {
-                    console.log(`triggering callback for target ${item.id}`);
-                    console.log($event);
                     this.rm(item);
+                    console.log($event);
                   },
                   target: item.id,
                 })}"

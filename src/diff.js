@@ -1,4 +1,4 @@
-import { appendDOM, rehydratedNode } from "./utils";
+import { appendDOM } from "./utils";
 
 export const getVDOM = (element) => {
   const parser = new DOMParser();
@@ -45,9 +45,9 @@ const patchAttributes = function (vdom, dom) {
   let domAttributes = attrbutesIndex(dom);
   if (vdomAttributes == domAttributes) return;
   Object.keys(vdomAttributes).forEach((key) => {
-    if (!dom.getAttribute(key)) {
+    if (!dom.getAttribute(key) && !key.startsWith("@")) {
       dom.setAttribute(key, vdomAttributes[key]);
-    } else if (dom.getAttribute(key)) {
+    } else if (dom.getAttribute(key) && !key.startsWith("@")) {
       if (vdomAttributes[key] != domAttributes[key]) {
         dom.setAttribute(key, vdomAttributes[key]);
       }
@@ -60,7 +60,9 @@ const patchAttributes = function (vdom, dom) {
   });
 };
 
-/** Credits: [Go Make Things](https://gomakethings.com/dom-diffing-with-vanilla-js/) */
+/** Credits: [Go Make Things](https://gomakethings.com/dom-diffing-with-vanilla-js/)
+ * Tweaked to account for custom elements and to diff attributes.
+ */
 export const diff = function (template, elem) {
   const domNodes = [...elem.childNodes];
   const templateNodes = [...template.childNodes];
@@ -76,9 +78,7 @@ export const diff = function (template, elem) {
 
   templateNodes.forEach(function (node, index) {
     if (!domNodes[index]) {
-      const clone = rehydratedNode(node);
-      elem.appendChild(clone);
-
+      elem.appendChild(node.cloneNode(true));
       return;
     }
 
