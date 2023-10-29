@@ -62,10 +62,9 @@ const patchAttributes = function (vdom, dom) {
 
 /** Credits: [Go Make Things](https://gomakethings.com/dom-diffing-with-vanilla-js/) */
 export const diff = function (template, elem) {
-  const domNodes = Array.prototype.slice.call(elem.childNodes);
-  const templateNodes = Array.prototype.slice.call(template.childNodes);
-  console.log(domNodes);
-  console.log(templateNodes);
+  const domNodes = [...elem.childNodes];
+  const templateNodes = [...template.childNodes];
+
   let count = domNodes.length - templateNodes.length;
   if (count > 0) {
     for (; count > 0; count--) {
@@ -118,7 +117,6 @@ export const diff = function (template, elem) {
     }
 
     if (node.childNodes.length > 0) {
-      console.log(isCustomElement(domNodes[index]));
       diff(node, domNodes[index]);
       patchAttributes(node, domNodes[index]);
     }

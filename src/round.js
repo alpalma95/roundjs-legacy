@@ -1,10 +1,11 @@
 import { getVDOMAsync, diffAsync } from "./diff";
-import { buildDOM } from "./round-html";
-import { appendDOM } from "./utils";
+import { buildDOM, html } from "./round-html";
+import { appendDOM, track, unregisterEvents } from "./utils";
 
 export class ReactiveWC extends HTMLElement {
   constructor() {
     super();
+    html.bind(this);
   }
   connectedCallback() {
     this.getProps();
@@ -32,6 +33,10 @@ export class ReactiveWC extends HTMLElement {
     appendDOM(root, innerHTML);
   }
   async update() {
+    console.log("Track WAS: ", track);
+    unregisterEvents(this);
+    console.log("Track is: ", track);
+
     const vdom = buildDOM(this.render());
     const dom = this.shadowRoot ? this.shadowRoot : this;
     await diffAsync(vdom, dom);

@@ -1,6 +1,3 @@
-import htm from "htm/mini";
-import { filterEmptyStrings } from "./utils";
-
 export const html = (strings, ...args) => {
   const sanitizedArray = args.map((arg) => {
     if (Array.isArray(arg)) return arg.join(" ");

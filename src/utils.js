@@ -43,31 +43,45 @@ export const rehydratedNode = (vdomNode) => {
   return clone;
 };
 
-const track = [];
-/**
- *
- * @param {HTMLElement} node HTMLElement to which we want to add the event listener
- * @param {{type: string, cb: ()=> {}, target: string}} event Object containing type of event and callback
- * @param {object} options
- * @returns
- */
-export const registerEvent = (node, event, options = {}) => {
-  const eventIsRegistered = track.some(
+export let track = [];
+
+const eventIsRegistered = (node, event) =>
+  track.some(
     (registry) =>
       registry.node == node &&
       registry.event.type == event.type &&
       registry.event.target === event.target
   );
 
-  if (eventIsRegistered) return;
+/**
+ *
+ * @param {HTMLElement} node HTMLElement to which we want to add the event listener
+ * @param {{type: string, cb: ()=> {}, target: string}} event Object containing type of event, callback and target
+ * @param {object} options
+ * @returns
+ */
+export const registerEvent = (node, event, options = {}) => {
+  const isRegistered = eventIsRegistered(node, event);
 
-  track.push({ node, event });
-  console.log(track);
-  // console.log(event.target);
-  // console.log(track);
+  if (isRegistered) {
+    return;
+  }
+
   // console.log(`${node.tagName.toLocaleLowerCase()} ${event.target}`);
   const handler = ($event) => {
-    if ($event.target.getAttribute(":key") == event.target) event.cb();
+    if ($event.originalTarget.getAttribute("e-key") == event.target)
+      event.cb($event);
   };
-  return node.addEventListener(event.type, handler, options);
+
+  track.push({ node, event, handler });
+  node.addEventListener(event.type, handler, options);
+  return event.cb;
+};
+
+export const unregisterEvents = (node) => {
+  track.forEach((registry) => {
+    node.removeEventListener(registry.event.type, registry.handler);
+  });
+  track = [...track.filter((registry) => registry.node != node)];
+  return;
 };

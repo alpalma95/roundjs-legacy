@@ -28,60 +28,55 @@ class Test extends ReactiveWC {
     });
   }
 
-  test() {
-    return (e) => console.log(e.target);
-  }
-
-  // This must be a fat arrow function, otherwise we'll need to remember
-  // to bind the method to this.
-  inc = (num) => {
+  inc(num) {
     this.state.count += num;
     const newItem = {
       id: this.state.count,
       text: `Item ${this.state.count}`,
     };
     this.state.items = [...this.state.items, newItem];
-  };
+  }
+
+  rm(item) {
+    this.state.items = [...this.state.items.filter((i) => i.id != item.id)];
+  }
 
   render() {
     return html`
       <h1 :text=${this.state.count}>Hi there</h1>
+      <b-b test="${this.state.count}"></b-b>
+
       <p>This is a counter: ${this.state.count}</p>
       <button
-        :key="inc_button"
-        click=${registerEvent(this, {
+        e-key="inc_button"
+        click="${registerEvent(this, {
           type: "click",
           cb: () => this.inc(3),
           target: "inc_button",
-        })}
-        mouseover=${registerEvent(this, {
+        })}"
+        mouseover="${registerEvent(this, {
           type: "mouseover",
           cb: () => this.inc(3),
           target: "inc_button",
-        })}
+        })}"
       >
         Inc + 3
       </button>
-      <b-b test="${this.state.count}"></b-b>
       <ul>
         ${this.state.items.map(
           (item) =>
-            html`<li
-              :key="${item.id}"
-              click="${registerEvent(this, {
-                type: "click",
-                cb: () => console.log(item.id),
-                target: item.id,
-              })}"
-              style="${item.id % 2 === 0 ? "color: red;" : ""}"
-            >
+            html`<li style="${item.id % 2 === 0 ? "color: red;" : ""}">
               No: ${item.id}, ${item.text}
               <button
-                :key="${item.id * 0.1}"
+                e-key="${item.id}"
                 click="${registerEvent(this, {
                   type: "click",
-                  cb: () => console.log(item.id + "From button!"),
-                  target: item.id * 0.1,
+                  cb: ($event) => {
+                    console.log(`triggering callback for target ${item.id}`);
+                    console.log($event);
+                    this.rm(item);
+                  },
+                  target: item.id,
                 })}"
                 style="${item.id % 2 === 0 ? "color: red;" : ""}"
               >
