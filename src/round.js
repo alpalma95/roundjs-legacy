@@ -6,12 +6,13 @@ import { unregisterEvents } from "./eventsManager";
 export class ReactiveWC extends HTMLElement {
   constructor() {
     super();
-    html.bind(this);
+    this._componentDidRender = false;
   }
   connectedCallback() {
+    this.firstRender();
+
     this.getProps();
     this.onInit();
-    this.firstRender();
   }
   attributeChangedCallback(name, oldValue, newValue) {
     name.startsWith(":")
@@ -19,10 +20,9 @@ export class ReactiveWC extends HTMLElement {
       : (this[name] = newValue);
     this.watchAttributes(
       name.slice(1),
-      JSON.parse(oldValue),
-      JSON.parse(newValue)
+      JSON.parse(newValue),
+      JSON.parse(oldValue)
     );
-    this.update();
   }
   disconnectedCallback() {
     this.onDestroy();
@@ -32,8 +32,10 @@ export class ReactiveWC extends HTMLElement {
 
     const innerHTML = buildDOM(this.render());
     appendDOM(root, innerHTML);
+    this._componentDidRender = true;
   }
   async update() {
+    if (!this._componentDidRender) return;
     unregisterEvents(this);
 
     const vdom = buildDOM(this.render());
@@ -68,6 +70,13 @@ export class ReactiveWC extends HTMLElement {
       },
     });
   }
+  /**
+   *
+   * @param {string} name Name of the attribute that is triggering the change callback
+   * @param {any} oldValue Old value previous to the change
+   * @param {any} newValue Value after the change
+   */
+  watchAttributes(name, oldValue, newValue) {}
   onInit() {}
   onDestroy() {}
   render() {}

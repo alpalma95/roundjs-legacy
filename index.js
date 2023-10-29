@@ -36,7 +36,7 @@ class Test extends ReactiveWC {
   render() {
     return html`
       <h1 :text=${this.state.count}>Hi there</h1>
-      <b-b test="${this.state.count}"></b-b>
+      <b-b :test="${this.state.count}"></b-b>
 
       <p>This is a counter: ${this.state.count}</p>
       <button
@@ -83,20 +83,27 @@ class Test extends ReactiveWC {
 window.customElements.define("test-test", Test);
 
 class B extends ReactiveWC {
+  static get observedAttributes() {
+    return [":test"];
+  }
   constructor() {
     super();
+    this.state = this.defineState({
+      count: "",
+    });
   }
 
+  watchAttributes(n, nv) {
+    if (n == "test") {
+      this.state.count = nv;
+    }
+  }
   render() {
     return html`
       <div style="background-color: red;">
-        <h1>Hello from B component <i>ss</i></h1>
+        <h1>Hello from B component <i>${this.state.count}</i></h1>
       </div>
     `;
   }
 }
 window.customElements.define("b-b", B);
-
-const t = new Test();
-const test1 = t.render();
-const test2 = t.render();
