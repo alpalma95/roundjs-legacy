@@ -45,9 +45,9 @@ const patchAttributes = function (vdom, dom) {
   let domAttributes = attrbutesIndex(dom);
   if (vdomAttributes == domAttributes) return;
   Object.keys(vdomAttributes).forEach((key) => {
-    if (!dom.getAttribute(key)) {
+    if (!dom.getAttribute(key) && !key.startsWith("@")) {
       dom.setAttribute(key, vdomAttributes[key]);
-    } else if (dom.getAttribute(key)) {
+    } else if (dom.getAttribute(key) && !key.startsWith("@")) {
       if (vdomAttributes[key] != domAttributes[key]) {
         dom.setAttribute(key, vdomAttributes[key]);
       }

@@ -38,16 +38,16 @@ class Test extends ReactiveWC {
 
   render() {
     return html`
-      <h1 _text=${this.state.count}>Hi there</h1>
-      <b-b _test="${this.state.count}"></b-b>
+      <h1 :text=${this.state.count}>Hi there</h1>
+      <b-b :test="${this.state.count}"></b-b>
 
       <p>This is a counter: ${this.state.count}</p>
       <button
         id="inc_button"
-        on-click="${delegate(this, {
+        @click="${delegate(this, {
           cb: this.inc,
         })}"
-        on-mouseover="${delegate(this, {
+        @mouseover="${delegate(this, {
           cb: () => this.inc(),
         })}"
       >
@@ -59,7 +59,7 @@ class Test extends ReactiveWC {
             html` <li style="${item.id % 2 === 0 ? "color: red;" : ""}">
               No: ${item.id}, ${item.text}
               <button
-                on-click="${delegate(this, {
+                @click="${delegate(this, {
                   cb: ($event) => {
                     this.rm(item);
                     console.log($event);

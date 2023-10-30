@@ -38,7 +38,7 @@ const insertKey = (string, key) => {
 const extractEventType = (string) => {
   const stringToArray = string.split(" ");
   const fullEventType = stringToArray.at(-1).split("=", 1);
-  const sanitizedEventType = fullEventType[0].slice(3);
+  const sanitizedEventType = fullEventType[0].slice(1);
   return sanitizedEventType;
 };
 
