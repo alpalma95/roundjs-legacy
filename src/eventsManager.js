@@ -18,7 +18,7 @@ const eventIsRegistered = (component, event) =>
  * @returns
  */
 export const delegate = (component, event, options = {}) => {
-  return () => {
+  return (eventType) => {
     const isRegistered = eventIsRegistered(component, event);
 
     if (isRegistered) {
@@ -27,6 +27,8 @@ export const delegate = (component, event, options = {}) => {
 
     let query = "";
 
+    event.type = eventType;
+    console.log(event.type);
     const handler = ($event) => {
       const target = $event.originalTarget;
       if (

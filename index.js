@@ -45,12 +45,10 @@ class Test extends ReactiveWC {
       <button
         id="inc_button"
         on-click="${delegate(this, {
-          type: "click",
           cb: this.inc,
           target: "inc_button",
         })}"
         on-mouseover="${delegate(this, {
-          type: "mouseover",
           cb: () => this.inc(),
           target: "inc_button",
         })}"
@@ -65,7 +63,6 @@ class Test extends ReactiveWC {
               <button
                 _key="${item.id}"
                 on-click="${delegate(this, {
-                  type: "click",
                   cb: ($event) => {
                     this.rm(item);
                     console.log($event);
