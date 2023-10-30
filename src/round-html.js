@@ -1,3 +1,36 @@
+const findKey = (string) => {
+  const indexOfkey = string.indexOf('_key="');
+  if (indexOfkey < 0) return null;
+
+  const foundKeySegment = string.slice(indexOfkey);
+  const foundKey = foundKeySegment.slice(
+    foundKeySegment.indexOf('"') + 1,
+    foundKeySegment.indexOf('"') + 37
+  );
+  return foundKey;
+};
+
+const insertKey = (string, key) => {
+  const openingIndex = string.lastIndexOf("<");
+  if (openingIndex === -1) return null;
+
+  let closingIndex;
+
+  for (let i = openingIndex + 1; i < string.length; i++) {
+    if (string[i] == " ") {
+      closingIndex = i;
+      break;
+    }
+  }
+
+  const stringWithKey = `${string.slice(
+    0,
+    closingIndex
+  )} _key="${key}" ${string.slice(closingIndex)}`;
+
+  return stringWithKey;
+};
+
 /**
  *
  * @param {string} string String located at same poisition as the argument
@@ -10,10 +43,26 @@ const extractEventType = (string) => {
 };
 
 export const html = (strings, ...args) => {
+  let transformedStrings = [...strings];
   const sanitizedArray = args.map((arg, i) => {
     if (typeof arg === "function") {
-      const eventType = extractEventType(strings[i]);
-      return arg(eventType);
+      const eventType = extractEventType(transformedStrings[i]);
+
+      let _key = self.crypto.randomUUID();
+      let stringWithKey = insertKey(transformedStrings[i], _key);
+
+      let index = i;
+      while (stringWithKey === null) {
+        index--;
+        const foundKey = findKey(transformedStrings[index]);
+        if (foundKey !== null) {
+          _key = foundKey;
+          stringWithKey = insertKey(transformedStrings[index], _key);
+          break;
+        }
+      }
+      transformedStrings[index] = stringWithKey;
+      return arg(eventType, _key);
     }
     if (Array.isArray(arg)) return arg.join(" ");
 
@@ -22,7 +71,7 @@ export const html = (strings, ...args) => {
     return arg;
   });
 
-  return strings.reduce(
+  return transformedStrings.reduce(
     (acc, currentString, index) =>
       acc + currentString + (sanitizedArray[index] ?? ""),
     ""

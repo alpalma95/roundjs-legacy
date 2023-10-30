@@ -13,12 +13,12 @@ const eventIsRegistered = (component, event) =>
 /**
  *
  * @param {ReactiveWC} component Web component to which we want to add the event listener
- * @param {{type: string, cb: ()=> {}, target: string}} event Object containing type of event, callback and target
+ * @param {{cb: ()=> {}}} event Object containing type of event, callback and target
  * @param {object} options
  * @returns
  */
 export const delegate = (component, event, options = {}) => {
-  return (eventType) => {
+  return (eventType, target) => {
     const isRegistered = eventIsRegistered(component, event);
 
     if (isRegistered) {
@@ -28,7 +28,8 @@ export const delegate = (component, event, options = {}) => {
     let query = "";
 
     event.type = eventType;
-    console.log(event.type);
+    event.target = target;
+
     const handler = ($event) => {
       const target = $event.originalTarget;
       if (

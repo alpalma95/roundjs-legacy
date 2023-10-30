@@ -46,11 +46,9 @@ class Test extends ReactiveWC {
         id="inc_button"
         on-click="${delegate(this, {
           cb: this.inc,
-          target: "inc_button",
         })}"
         on-mouseover="${delegate(this, {
           cb: () => this.inc(),
-          target: "inc_button",
         })}"
       >
         Inc + 3
@@ -58,16 +56,14 @@ class Test extends ReactiveWC {
       <ul>
         ${this.state.items.map(
           (item) =>
-            html`<li style="${item.id % 2 === 0 ? "color: red;" : ""}">
+            html` <li style="${item.id % 2 === 0 ? "color: red;" : ""}">
               No: ${item.id}, ${item.text}
               <button
-                _key="${item.id}"
                 on-click="${delegate(this, {
                   cb: ($event) => {
                     this.rm(item);
                     console.log($event);
                   },
-                  target: item.id,
                 })}"
                 style="${item.id % 2 === 0 ? "color: red;" : ""}"
               >
