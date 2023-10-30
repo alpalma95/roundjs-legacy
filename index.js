@@ -19,6 +19,9 @@ class Test extends ReactiveWC {
       ],
     });
   }
+  onInit() {
+    console.log(this.querySelector("[click]"));
+  }
 
   inc(num) {
     this.state.count++;
@@ -35,18 +38,18 @@ class Test extends ReactiveWC {
 
   render() {
     return html`
-      <h1 :text=${this.state.count}>Hi there</h1>
-      <b-b :test="${this.state.count}"></b-b>
+      <h1 _text=${this.state.count}>Hi there</h1>
+      <b-b _test="${this.state.count}"></b-b>
 
       <p>This is a counter: ${this.state.count}</p>
       <button
         id="inc_button"
-        click="${registerEvent(this, {
+        on-click="${registerEvent(this, {
           type: "click",
           cb: this.inc,
           target: "inc_button",
         })}"
-        mouseover="${registerEvent(this, {
+        on-mouseover="${registerEvent(this, {
           type: "mouseover",
           cb: () => this.inc(),
           target: "inc_button",
@@ -60,8 +63,8 @@ class Test extends ReactiveWC {
             html`<li style="${item.id % 2 === 0 ? "color: red;" : ""}">
               No: ${item.id}, ${item.text}
               <button
-                :key="${item.id}"
-                @click="${registerEvent(this, {
+                _key="${item.id}"
+                on-click="${registerEvent(this, {
                   type: "click",
                   cb: ($event) => {
                     this.rm(item);
@@ -84,7 +87,7 @@ window.customElements.define("test-test", Test);
 
 class B extends ReactiveWC {
   static get observedAttributes() {
-    return [":test"];
+    return ["_test"];
   }
   constructor() {
     super();

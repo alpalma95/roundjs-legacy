@@ -27,7 +27,7 @@ export const registerEvent = (component, event, options = {}) => {
   const handler = ($event) => {
     const target = $event.originalTarget;
     if (
-      target.getAttribute(":key") == event.target ||
+      target.getAttribute("_key") == event.target ||
       target.getAttribute("id") == event.target
     ) {
       event.cb.call(component, $event);

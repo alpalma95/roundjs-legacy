@@ -15,7 +15,7 @@ export class ReactiveWC extends HTMLElement {
     this.onInit();
   }
   attributeChangedCallback(name, oldValue, newValue) {
-    name.startsWith(":")
+    name.startsWith("_")
       ? (this[name.slice(1)] = newValue)
       : (this[name] = newValue);
     this.watchAttributes(
