@@ -1,7 +1,7 @@
 import { diffAsync } from "./diff";
 import { buildDOM, html } from "./round-html";
 import { appendDOM } from "./utils";
-import { unregisterEvents } from "./eventsManager";
+import { hydrate, unregisterEvents } from "./eventsManager";
 
 export class ReactiveWC extends HTMLElement {
   constructor() {
@@ -13,6 +13,7 @@ export class ReactiveWC extends HTMLElement {
 
     this.getProps();
     this.onInit();
+    hydrate(this);
   }
   attributeChangedCallback(name, oldValue, newValue) {
     name.startsWith(":")
@@ -41,6 +42,7 @@ export class ReactiveWC extends HTMLElement {
     const vdom = buildDOM(this.render());
     const dom = this.shadowRoot ? this.shadowRoot : this;
     await diffAsync(vdom, dom);
+    hydrate(this);
   }
 
   getProps() {

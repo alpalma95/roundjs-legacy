@@ -29,8 +29,6 @@ export const delegate = (component, callback, options = {}) => {
       target: target,
       cb: callback,
     };
-    event.type = eventType;
-    event.target = target;
 
     const isRegistered = eventIsRegistered(component, event);
 
@@ -38,27 +36,34 @@ export const delegate = (component, callback, options = {}) => {
       return;
     }
 
-    let query = "";
-
     const handler = ($event) => {
-      const target = $event.originalTarget;
-      if (
-        target.getAttribute("_key") == event.target ||
-        target.getAttribute("id") == event.target
-      ) {
-        event.cb.call(component, $event);
-      }
+      event.cb.call(component, $event);
     };
 
     track.push({ component, event, handler });
-    component.addEventListener(event.type, handler, options);
+
     return event.cb;
   };
 };
 
+export const hydrate = (component) => {
+  track.forEach((registry) => {
+    const targetChild = component.querySelector(
+      `[_key="${registry.event.target}"]`
+    );
+    if (!targetChild) return;
+
+    targetChild.addEventListener(registry.event.type, registry.handler);
+  });
+};
+
 export const unregisterEvents = (component) => {
   track.forEach((registry) => {
-    component.removeEventListener(registry.event.type, registry.handler);
+    const targetChild = component.querySelector(
+      `[_key="${registry.event.target}"]`
+    );
+    if (!targetChild) return;
+    targetChild.removeEventListener(registry.event.type, registry.handler);
   });
   track = [...track.filter((registry) => registry.component != component)];
   return;
