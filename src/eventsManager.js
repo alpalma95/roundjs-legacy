@@ -17,8 +17,16 @@ const eventIsRegistered = (component, event) =>
  * @param {object} options
  * @returns
  */
-export const delegate = (component, event, options = {}) => {
+export const delegate = (component, callback, options = {}) => {
   return (eventType, target) => {
+    const event = {
+      type: eventType,
+      target: target,
+      cb: callback,
+    };
+    event.type = eventType;
+    event.target = target;
+
     const isRegistered = eventIsRegistered(component, event);
 
     if (isRegistered) {
@@ -26,9 +34,6 @@ export const delegate = (component, event, options = {}) => {
     }
 
     let query = "";
-
-    event.type = eventType;
-    event.target = target;
 
     const handler = ($event) => {
       const target = $event.originalTarget;

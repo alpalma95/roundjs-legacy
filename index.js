@@ -43,31 +43,23 @@ class Test extends ReactiveWC {
 
       <p>This is a counter: ${this.state.count}</p>
       <button
-        id="inc_button"
-        @click="${delegate(this, {
-          cb: this.inc,
-        })}"
-        @mouseover="${delegate(this, {
-          cb: () => this.inc(),
-        })}"
+        @click="${delegate(this, this.inc)}"
+        @mouseover="${delegate(this, () => this.inc())}"
       >
-        Inc + 3
+        Increment
       </button>
       <ul>
         ${this.state.items.map(
           (item) =>
-            html` <li style="${item.id % 2 === 0 ? "color: red;" : ""}">
+            html` <li>
               No: ${item.id}, ${item.text}
               <button
-                @click="${delegate(this, {
-                  cb: ($event) => {
-                    this.rm(item);
-                    console.log($event);
-                  },
+                @click="${delegate(this, ($event) => {
+                  this.rm(item);
+                  console.log($event);
                 })}"
-                style="${item.id % 2 === 0 ? "color: red;" : ""}"
               >
-                log item ${item.id}
+                Remove item ${item.id}
               </button>
             </li>`
         )}
@@ -80,7 +72,7 @@ window.customElements.define("test-test", Test);
 
 class B extends ReactiveWC {
   static get observedAttributes() {
-    return ["_test"];
+    return [":test"];
   }
   constructor() {
     super();
