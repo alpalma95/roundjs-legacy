@@ -31,10 +31,6 @@ const insertKey = (string, key) => {
   return stringWithKey;
 };
 
-/**
- *
- * @param {string} string String located at same poisition as the argument
- */
 const extractEventType = (string) => {
   const stringToArray = string.split(" ");
   const fullEventType = stringToArray.at(-1).split("=", 1);

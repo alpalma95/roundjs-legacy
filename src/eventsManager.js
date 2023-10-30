@@ -13,11 +13,16 @@ const eventIsRegistered = (component, event) =>
 /**
  *
  * @param {ReactiveWC} component Web component to which we want to add the event listener
- * @param {{cb: ()=> {}}} event Object containing type of event, callback and target
- * @param {object} options
+ * @param {Function} callback Callback for the event handler
+ * @param {{}} options Options we can pass to add event listener method
  * @returns
  */
 export const delegate = (component, callback, options = {}) => {
+  /**
+   * @param {string} eventType Type of the event we're registering (click, mouseover, focus...)
+   * @param {string} target Unique identifier generated when rendering the HTML string.
+   * It'll be used to attach the event listener to the correct component's child
+   */
   return (eventType, target) => {
     const event = {
       type: eventType,
