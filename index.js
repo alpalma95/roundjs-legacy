@@ -7,23 +7,11 @@ class Test extends ReactiveWC {
     super();
     this.state = this.defineState({
       count: 0,
-      items: [
-        {
-          id: 1,
-          text: "Item 1",
-        },
-        {
-          id: 2,
-          text: "Item 2",
-        },
-      ],
+      items: [],
     });
   }
-  onInit() {
-    console.log(this.querySelector("[click]"));
-  }
 
-  inc(num) {
+  inc() {
     this.state.count++;
     const newItem = {
       id: this.state.count,
@@ -56,7 +44,7 @@ class Test extends ReactiveWC {
               <button
                 @click="${delegate(this, ($event) => {
                   this.rm(item);
-                  console.log($event);
+                  //   console.log($event);
                 })}"
               >
                 Remove item ${item.id}
