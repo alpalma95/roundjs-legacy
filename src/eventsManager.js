@@ -17,26 +17,30 @@ const eventIsRegistered = (component, event) =>
  * @param {object} options
  * @returns
  */
-export const registerEvent = (component, event, options = {}) => {
-  const isRegistered = eventIsRegistered(component, event);
+export const delegate = (component, event, options = {}) => {
+  return () => {
+    const isRegistered = eventIsRegistered(component, event);
 
-  if (isRegistered) {
-    return;
-  }
-
-  const handler = ($event) => {
-    const target = $event.originalTarget;
-    if (
-      target.getAttribute("_key") == event.target ||
-      target.getAttribute("id") == event.target
-    ) {
-      event.cb.call(component, $event);
+    if (isRegistered) {
+      return;
     }
-  };
 
-  track.push({ component, event, handler });
-  component.addEventListener(event.type, handler, options);
-  return event.cb;
+    let query = "";
+
+    const handler = ($event) => {
+      const target = $event.originalTarget;
+      if (
+        target.getAttribute("_key") == event.target ||
+        target.getAttribute("id") == event.target
+      ) {
+        event.cb.call(component, $event);
+      }
+    };
+
+    track.push({ component, event, handler });
+    component.addEventListener(event.type, handler, options);
+    return event.cb;
+  };
 };
 
 export const unregisterEvents = (component) => {

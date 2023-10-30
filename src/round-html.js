@@ -1,6 +1,10 @@
 export const html = (strings, ...args) => {
   const sanitizedArray = args.map((arg) => {
+    if (typeof arg === "function") {
+      return arg();
+    }
     if (Array.isArray(arg)) return arg.join(" ");
+
     if (typeof arg === "object") return JSON.stringify(arg);
 
     return arg;

@@ -1,6 +1,6 @@
 import { html } from "./src/round-html";
 import { ReactiveWC } from "./src/round";
-import { registerEvent } from "./src/";
+import { delegate } from "./src/";
 
 class Test extends ReactiveWC {
   constructor() {
@@ -44,12 +44,12 @@ class Test extends ReactiveWC {
       <p>This is a counter: ${this.state.count}</p>
       <button
         id="inc_button"
-        on-click="${registerEvent(this, {
+        on-click="${delegate(this, {
           type: "click",
           cb: this.inc,
           target: "inc_button",
         })}"
-        on-mouseover="${registerEvent(this, {
+        on-mouseover="${delegate(this, {
           type: "mouseover",
           cb: () => this.inc(),
           target: "inc_button",
@@ -64,7 +64,7 @@ class Test extends ReactiveWC {
               No: ${item.id}, ${item.text}
               <button
                 _key="${item.id}"
-                on-click="${registerEvent(this, {
+                on-click="${delegate(this, {
                   type: "click",
                   cb: ($event) => {
                     this.rm(item);
