@@ -16,7 +16,7 @@ export const getVDOMAsync = (element) => {
 };
 
 export const isCustomElement = function (node) {
-  return node.tagName?.includes("-");
+  return node?.tagName?.includes("-");
 };
 
 const getNodeType = function (node) {
@@ -32,6 +32,7 @@ const getNodeContent = function (node) {
 
 const attrbutesIndex = function (el) {
   var attributes = {};
+  console.log(el)
   if (el.attributes == undefined) return attributes;
   for (var i = 0, atts = el.attributes, n = atts.length; i < n; i++) {
     attributes[atts[i].name] = atts[i].value;
@@ -43,6 +44,8 @@ const attrbutesIndex = function (el) {
 const patchAttributes = function (vdom, dom) {
   let vdomAttributes = attrbutesIndex(vdom);
   let domAttributes = attrbutesIndex(dom);
+  console.log(domAttributes)
+  console.log(vdomAttributes)
   if (vdomAttributes == domAttributes) return;
   Object.keys(vdomAttributes).forEach((key) => {
     if (!dom.getAttribute(key) && !key.startsWith("@")) {
@@ -77,6 +80,8 @@ export const diff = function (template, elem) {
   }
 
   templateNodes.forEach(function (node, index) {
+    if (isCustomElement(domNodes[index]))
+      patchAttributes(node, domNodes[index]);
     if (!domNodes[index]) {
       elem.appendChild(node.cloneNode(true));
       return;
@@ -98,8 +103,7 @@ export const diff = function (template, elem) {
       domNodes[index].textContent = templateContent;
     }
 
-    if (isCustomElement(domNodes[index]))
-      patchAttributes(node, domNodes[index]);
+    
     if (
       domNodes[index].childNodes.length > 0 &&
       node.childNodes.length < 1 &&

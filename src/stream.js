@@ -14,8 +14,9 @@ export class Stream {
   }
 
   connect(component, cb) {
-    this.value = this._initialValue;
     this._subscribers.push({ component, cb });
+    this.value = this._initialValue;
+
   }
 
   disconnect(componentToUnsubscribe) {

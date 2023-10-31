@@ -9,10 +9,10 @@ export class ReactiveWC extends HTMLElement {
     this._componentDidRender = false;
   }
   connectedCallback() {
-    this.firstRender();
-
     this.getProps();
     this.onInit();
+    this.firstRender();
+
     hydrate(this);
   }
   attributeChangedCallback(name, oldValue, newValue) {

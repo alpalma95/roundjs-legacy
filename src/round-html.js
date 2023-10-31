@@ -1,4 +1,5 @@
 const findKey = (string) => {
+  console.log(string)
   const indexOfkey = string.indexOf('_key="');
   if (indexOfkey < 0) return null;
 
@@ -46,7 +47,11 @@ export const html = (strings, ...args) => {
 
       let _key = self.crypto.randomUUID();
       let stringWithKey = insertKey(transformedStrings[i], _key);
-
+      if(eventType == 'input') {
+        console.log(_key)
+        console.log(stringWithKey)
+      }
+    
       let index = i;
       while (stringWithKey === null) {
         index--;

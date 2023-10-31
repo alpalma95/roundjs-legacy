@@ -1,34 +1,40 @@
 import { html } from "./src/round-html";
 import { ReactiveWC } from "./src/round";
 import { delegate } from "./src/";
+import { itemService } from "./itemService";
 
 class Test extends ReactiveWC {
   constructor() {
     super();
     this.state = this.defineState({
-      count: 0,
+      count: 2,
       items: [],
+      text: ""
     });
+
+  }
+
+  onInit() {
+    itemService.items.connect(this, (items) => this.state.items = items)
+    itemService.currentItem.connect(this, (val) => this.state.text = val)
+    
   }
 
   inc() {
     this.state.count++;
-    const newItem = {
-      id: this.state.count,
-      text: `Item ${this.state.count}`,
-    };
-    this.state.items = [...this.state.items, newItem];
+    console.log({id: this.state.count, text: "New item "})
+    itemService.addItem({id: this.state.count, text: "New item "})
   }
 
   rm(item) {
-    this.state.items = [...this.state.items.filter((i) => i.id != item.id)];
+    itemService.removeItem(item)
   }
 
   render() {
     return html`
       <h1 :text=${this.state.count}>Hi there</h1>
       <b-b :test="${this.state.count}"></b-b>
-
+      <p>Text from service: ${this.state.text}</p>
       <p>This is a counter: ${this.state.count}</p>
       <button
         @click="${delegate(this, this.inc)}"
@@ -66,7 +72,19 @@ class B extends ReactiveWC {
     super();
     this.state = this.defineState({
       count: "",
+      newItem: {
+        text: "",
+        id: self.crypto.randomUUID()
+      }
     });
+    this.newItem = {
+      text: "",
+      id: self.crypto.randomUUID()
+    }
+  }
+
+  onInit() {
+    itemService.currentItem.connect(this, (val) => this.state.newItem.text = val)
   }
 
   watchAttributes(n, nv) {
@@ -76,8 +94,14 @@ class B extends ReactiveWC {
   }
   render() {
     return html`
-      <div style="background-color: red;">
-        <h1>Hello from B component <i>${this.state.count}</i></h1>
+      <div style="background-color: ${this.test % 2 == 0 ? 'blue' : 'red'};">
+        <h1 style="background-color: ${this.test % 2 == 0 ? 'red' : 'blue'};">Hello from B component <i>${this.state.count}</i></h1>
+        
+        <input type="text" @input="${delegate(this, ($event)=> {
+          itemService.editItem($event.target.value);
+        })}"
+        >
+        <button >Add</button>
       </div>
     `;
   }

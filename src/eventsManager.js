@@ -42,7 +42,7 @@ export const delegate = (component, callback, options = {}) => {
 
     track.push({ component, event, handler });
 
-    return event.cb;
+    return event.cb.name;
   };
 };
 
@@ -51,6 +51,7 @@ export const hydrate = (component) => {
     const targetChild = component.querySelector(
       `[_key="${registry.event.target}"]`
     );
+    console.log("Looking for child: " + registry.event.target + " " + registry.event.type)
     if (!targetChild) return;
 
     targetChild.addEventListener(registry.event.type, registry.handler);
