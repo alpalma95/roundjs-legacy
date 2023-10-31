@@ -14,8 +14,5 @@
     "@node-minify/core": "^8.0.6",
     "@node-minify/uglify-es": "^8.0.6",
     "vite": "^4.5.0"
-  },
-  "dependencies": {
-    "htm": "^3.1.1"
   }
 }

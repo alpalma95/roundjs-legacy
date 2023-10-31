@@ -1,5 +1,5 @@
 import { diffAsync } from "./diff";
-import { buildDOM, html } from "./round-html";
+import { buildDOM } from "./round-html";
 import { appendDOM } from "./utils";
 import { hydrate, unregisterEvents } from "./eventsManager";
 
